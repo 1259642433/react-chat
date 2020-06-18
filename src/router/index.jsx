@@ -3,22 +3,34 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import Home from '../pages/Home'
 import Error404 from '../pages/Error404'
+import Chat from '../pages/Chat/index'
 const routes = [
   {
-    path: "/",
-    component: () => import('../pages/Home'),
-  }
-  // etc.
+    path:'/',
+    component: Home,
+    exact:true
+  },
+  {
+    path:'/home',
+    component: Home,
+    exact:true
+  },
+  {
+    path:'/chat',
+    component: Chat
+  },
+  {
+    path:'',
+    component: Error404
+  },
 ]
 function index() {
     return (
         <Router>
           <Switch>
-            <Route path="/home" component={Home} />
-            <Route exact path="/404" component={Error404} />
-            <Route exact path="/" component={Home} />
-            {/* <Redirect to={"/404"} /> */}
-            <Route component={Error404} />
+            {routes.map(route => (
+              <Route key={route.path} path={route.path} component={route.component}  exact={route.exact} />
+            ))}
           </Switch>
         </Router>
     )  

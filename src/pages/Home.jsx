@@ -13,7 +13,7 @@ function Home() {
   return (
     <div className="home" style={{textAlign:'center'}}>
       <h1 >Home</h1>
-      <button onClick={()=>toPage('/asfasdfa651a6df51sa')}>跳转</button>
+      <button onClick={()=>toPage('/chat')}>跳转</button>
     </div>
     
   )

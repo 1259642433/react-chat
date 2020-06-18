@@ -1,4 +1,5 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#react-chat
+基于react,socket.io实现的聊天室
 
 ## Available Scripts
 
