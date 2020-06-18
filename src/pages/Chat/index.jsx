@@ -1,5 +1,6 @@
 import React from 'react'
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
 import io from 'socket.io-client'
 import './index.scss'
 
@@ -9,21 +10,24 @@ const socket = io('ws://localhost:9999', {
 })
 
 function Chat() {
+    const [notice, setNotice] = React.useState('');
     const [msg, setMsg] = React.useState('');
     const [msgsList, setMsgsList] = React.useState([]);
-    (function init(){
+    const [noticeOpen, setNoticeOpen] = React.useState(false);
+    (() => {
         socket.on('serverMsg', res => {
             if (res.type === 'chatMsg') {
                 setMsgsList([...msgsList,res])
             }
         })
     })()
-    function textAreachange(e) {
+    const textAreachange = (e) => {
         setMsg(e.target.value)
     }
-    function send() {
+    const send = () => {
         if (!msg) {
-            console.log('请输入内容')
+            setNotice('请输入要发送的内容')
+            setNoticeOpen(true)
             return
         }
         let data = {
@@ -40,12 +44,18 @@ function Chat() {
         },100)
         
     }
-
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setNoticeOpen(false);
+    };
     return (
         <div className="chat">
             <div className="chat-wrapper">
                 <h1 className="title">Chat</h1>
-                <div className="msgs-container">
+                <div className="msgs-wrapper">
+                    <div className="msgs-container">
                     <div className="msgs">
                         {
                             msgsList
@@ -53,6 +63,7 @@ function Chat() {
                                     return <Person date={item} key={index}></Person>
                                 })
                         }
+                    </div>
                     </div>
                 </div>
                 <div className="edit">
@@ -68,6 +79,14 @@ function Chat() {
                         color="primary">发送</Button>
                 </div>
             </div>
+            <Snackbar
+                anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+                open={noticeOpen}
+                autoHideDuration={3000}
+                onClose={handleClose}
+                message={notice}
+                key={'Snackbar'}
+            />
         </div>
     );
 }
